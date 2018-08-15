@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        
+        div {
+            width: 100%;
+        }
+        
+        ul {
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        
+        li {
+            width: 100px;
+            height: 100%;
+            display: inline-block;
+            float: left;
+        }
+        
+        img {
+            width: 100px;
+            height: 100px;
+        }
+    </style>
+</head>
+<div>
+    <ul>
+        <li id="imgBo">
+            <img src="./img/slide_01_640x340.jpg" alt="">
+        </li>
+        <!-- <li>
+            <img src="./img/slide_02_640x340.jpg" alt="">
+        </li>
+        <li>
+            <img src="./img/slide_03_640x340.jpg" alt="">
+        </li>
+        <li>
+            <img src="./img/slide_04_640x340.jpg" alt="">
+        </li> -->
+    </ul>
+</div>
+
+<body>
+
+</body>
+
+</html>
+<script>
+    var imgBox = document.getElementById("imgBo");
+    console.log(imgBox);
+    var startX = 0; //起始X位置
+    var moveX = 0; //记录滑动过程中的x位置
+    var distanceX = 0; //一次滑动触摸时的x轴方向的偏移量
+
+    /*封装常用的操作*/
+    /*1.开启过渡*/
+    var openTransition = function() {
+        imgBox.style.transition = "all 0.3s";
+        imgBox.style.webkitTransition = "all 0.3s";
+    };
+    /*2.关闭过渡*/
+    var closeTransition = function() {
+            imgBox.style.transition = "none";
+            imgBox.style.webkitTransition = "none";
+        }
+        /*3.设置偏移*/
+    var setTransform = function(distanceX) {
+        imgBox.style.transform = "translateX(" + (distanceX) + "px)";
+        imgBox.style.transform = "webkitTranslateX(" + (distanceX) + "px)";
+    }
+
+    /*手指开始触摸*/
+    imgBox.addEventListener("touchstart", function(e) {
+
+        /*按下手指的时候：能够拉住轮播--暂停时钟--touchstart*/
+        // clearInterval(timerId);
+        /*记录起始位置*/
+        startX = e.touches[0].clientX;
+        console.log(startX + "开始")
+    });
+    /*手指滑动*/
+    imgBox.addEventListener("touchmove", function(e) {
+
+        /*记录滑动时的x的位置*/
+        moveX = e.touches[0].clientX;
+
+        console.log(moveX + "记录滑动时的x的位置")
+            /*计算偏移量*/
+        distanceX = moveX - startX;
+
+        console.log(distanceX + "计算偏移量");
+        /*设置偏移:偏移默认都是参照元素是了原始的坐标(左上角)。所以在设置偏移的时候需要先考虑当前的索引位置，在当前索引位置的基础再进行偏移*/
+
+        // imgBox.style.transform = "translateX(" + (distanceX) + "px)";
+        // imgBox.style.transform = "webkitTranslateX(" + (distanceX) + "px)";
+
+    });
+    /*手指离开*/
+    imgBox.addEventListener("touchend", function(e) {
+            imgBox.style.transform = "translateX(" + (distanceX) + "px)";
+            imgBox.style.transform = "webkitTranslateX(" + (distanceX) + "px)";
+        })
+    /*当手指松开的时候，需要判断当前滑动的距离是否超出当前轮播图的1/3,如果超过，则翻页，否则回弹--touchend.再次开启时钟*/
+    // if (Math.abs(distanceX) > bannerW / 3) {
+    //     /*判断方向*/
+    //     if (distanceX > 0) {
+    //         index--;
+    //         /*开启过渡*/
+    //         openTransition();
+    //         /*设置偏移*/
+    //         setTransform(-index * bannerW);
+    //     } else if (distanceX < 0) {
+    //         index++;
+    //         /*开启过渡*/
+    //         openTransition();
+    //         /*设置偏移*/
+    //         setTransform(-index * bannerW);
+    //     }
+    // } else {
+    //     //当前滑动没有超过1/3
+    //     openTransition();
+    //     /*设置偏移*/
+    //     setTransform(-index * bannerW);
+    // }
+
+    /*重新开启时钟*/
+    // timerId = setInterval(function() {
+    /*6.增加索引*/
+    // index++;
+    // /*判断索引是否越界，如果是，则重置到起始位置*/
+    // /*7.添加过渡*/
+    // openTransition();
+    // /*8.设置偏移*/
+    // setTransform(-index * bannerW);
+    // }, 2000);
+    // });
+
+    // /*为轮播图添加过渡效果执行完毕的监听事件：当一个过渡效果执行完毕会触发这个事件*/
+    // imgBox.addEventListener("transitionEnd", function() {
+    //     /*判断当前索引，如果是最后一张，就调用索引1，如果是最前面一张，就调用索引8*/
+    //     if (index == 0) {
+    //         index = 5;
+    //         /*关闭过渡*/
+    //         closeTransition();
+    //         /*8.设置偏移*/
+    //         setTransform(-index * bannerW);
+    //     } else if (index == 5) {
+    //         index = 1;
+    //         closeTransition();
+    //         /*8.设置偏移*/
+    //         setTransform(-index * bannerW);
+    //     }
+    // });
+    // imgBox.addEventListener("webkitTransitionEnd", function() {
+    //     if (index == 0) {
+    //         index = 5;
+    //         closeTransition();
+    //         /*8.设置偏移*/
+    //         setTransform(-index * bannerW);
+    //     } else if (index == 5) {
+    //         index = 1;
+    //         closeTransition();
+    //         /*8.设置偏移*/
+    //         setTransform(-index * bannerW);
+    //     }
+    // });
+</script>
